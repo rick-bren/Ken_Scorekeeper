@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Score keeper App</title>
+        <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+        <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    </head>
+    <style>
+        body{
+            background-image: url("./images/cricket.jpg");
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .Ctr{
+            background-color: rgb(147, 189, 221);
+            width: 398px;
+            height: 100px;
+            overflow-x: auto ;
+            border-radius: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 10px;
+
+        }
+
+        .text{
+            color:yellowgreen
+        }
+    </style>
+
+    <body >
+        <div id="root" style="text-align:center"></div>
+        <script type="text/babel">
+            let score=0;
+            let wicket=0;
+            let ball=[];
+            let hit=0;
+            let refIn=React.createRef();
+            function updateScore(num){
+                hit=num;          
+                console.log(hit)       
+                rootElement.render(<App />)        
+            }
+            function addWicket(){
+                hit="w";
+                console.log(hit)  
+                rootElement.render(<App />)
+            }
+            const Butt = () =>{
+                return(
+                <div>
+                    <button onClick={()=>updateScore(0)}>0</button>
+                    <button onClick={()=>updateScore(1)}>1</button>
+                    <button onClick={()=>updateScore(2)}>2</button>
+                    <button onClick={()=>updateScore(3)}>3</button>
+                    <button onClick={()=>updateScore(4)}>4</button>
+                    <button onClick={()=>updateScore(5)}>5</button>
+                    <button onClick={()=>updateScore(6)}>6</button>
+                    <button onClick={()=>addWicket()}>Wicket</button>
+                    </div>)
+            }
+            const eventHandle = (event) =>{
+                event.preventDefault();
+                ball.unshift(<span>
+                    {`${hit}: ${refIn.current.value }`}
+                </span>);
+                refIn.current.value=""
+                if(hit==="w"){
+                    wicket+=1
+                }
+                else{
+                    score+=hit
+                };
+                console.log(ball)
+                rootElement.render(<App />)
+                
+            };
+            const Form = () =>{
+                return(
+                <form onSubmit={eventHandle}>
+                    <input value={hit}/>
+                    <input placeholder="Add" ref={refIn}/>
+                    <button>submit</button>
+                </form>);
+            }
+           
+            const App = () =>{
+                return(
+                    <>
+                    <hr/>
+                    <div className="text">
+                    <h1 className="y">Score-Keeper-Application</h1>
+                    <h2 className="y">Score {score}/{wicket}</h2></div>
+                    <Butt />
+                    <br />
+                    <br /><hr /><br />
+                    <Form /><br/>
+                    <div className="Ctr">
+                    {ball.map((res,index)=>(<p key={index}>{res}</p>))}</div>
+                    </>
+                    
+                )
+                }
+            const rootElement = ReactDOM.createRoot(document.getElementById("root"));
+            rootElement.render(<App />)
+                
+            
+        </script>
+    </body>
+</html>
